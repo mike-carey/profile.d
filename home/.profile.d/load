@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+function info() {
+  echo "$*" >> ~/.profile.d.log
+}
+
+for file in $HOME/.profile.d/*.sh; do
+  if [ -f "$file" ]; then
+    info "Loading base: $file"
+    # shellcheck source=$HOME/.profile.d/*.sh
+    source "$file"
+  fi
+done
+
+for file in $HOME/.profile.d/*/*.sh; do
+  module="$(basename $file)"
+  if [ -f "$file" ]; then
+    info "Loading $module file: $file"
+    # shellcheck source=$HOME/.profile.d/*.sh
+    source "$file"
+  fi
+done
+unset file module info
